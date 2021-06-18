@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+    api:
+        build:
+            context: ./api
+            dockerfile: Dockerfile
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./api:/var/www/html:consistent
+        environment:
+            - APP_ENV=dev
+            - DATABASE_URL=mysql://esgi16:QX7r4U8TAV5A2WbZkoje@mysql-ext.infoclimat.net:3306/hackaton_esgi_groupe16
+    app:
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./app:/usr/src/app/app
+            - /usr/src/app/app/node_modules
+    adminer:
+        image: adminer
+        ports:
+            - 18080:8080
+    nginx:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+        volumes:
+            - ./api:/var/www/html:consistent
+            
